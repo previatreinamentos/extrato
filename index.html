@@ -18,7 +18,7 @@
             --text-light: #f5f5f7;
             --text-muted: #a0a0aa;
             --border-color: #33333d;
-            --header-height: 2.8cm; /* Faixa superior cobrindo pelo menos 2cm */
+            --header-height: 1cm; /* Reduzido para 1cm apenas para cobrir a barra do Apps Script */
         }
 
         * {
@@ -36,7 +36,7 @@
             overflow: hidden;
         }
 
-        /* --- TELA DE LOGIN --- */
+        /* TELA DE LOGIN */
         #login-container {
             display: flex;
             justify-content: center;
@@ -121,16 +121,12 @@
             font-size: 15px;
             font-weight: 600;
             cursor: pointer;
-            transition: background-color 0.3s, transform 0.1s;
+            transition: background-color 0.3s;
             margin-top: 10px;
         }
 
         .btn-login:hover {
             background-color: var(--orange-hover);
-        }
-
-        .btn-login:active {
-            transform: scale(0.99);
         }
 
         .error-message {
@@ -140,7 +136,7 @@
             display: none;
         }
 
-        /* --- TELA PRINCIPAL (APP) --- */
+        /* TELA PRINCIPAL DO SISTEMA INCORPORADO */
         #app-container {
             display: none;
             width: 100%;
@@ -148,29 +144,23 @@
             flex-direction: column;
         }
 
-        /* Faixa Personalizada (Superior > 2 cm) */
+        /* Faixa Compacta Superior (Exatos 1cm) */
         .top-banner {
             height: var(--header-height);
-            min-height: 2.8cm;
+            min-height: 1cm;
             background: #111114;
             border-bottom: 2px solid var(--orange-primary);
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 30px;
+            padding: 0 20px;
             z-index: 100;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
             position: relative;
         }
 
-        .header-brand {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
         .header-brand h1 {
-            font-size: 22px;
+            font-size: 16px;
             font-weight: 700;
         }
 
@@ -179,10 +169,10 @@
         }
 
         .header-tagline {
-            font-size: 12px;
+            font-size: 11px;
             color: var(--text-muted);
             border-left: 1px solid var(--border-color);
-            padding-left: 12px;
+            padding-left: 10px;
             display: none;
         }
 
@@ -193,11 +183,11 @@
         .user-info {
             display: flex;
             align-items: center;
-            gap: 20px;
+            gap: 15px;
         }
 
         .user-name {
-            font-size: 14px;
+            font-size: 12px;
             color: var(--text-light);
             font-weight: 600;
         }
@@ -206,10 +196,10 @@
             background: transparent;
             border: 1px solid var(--border-color);
             color: var(--text-muted);
-            padding: 8px 16px;
-            border-radius: 6px;
+            padding: 4px 10px;
+            border-radius: 4px;
             cursor: pointer;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 600;
             transition: all 0.3s;
         }
@@ -219,7 +209,7 @@
             color: var(--orange-primary);
         }
 
-        /* Envolvente do iframe que desloca para esconder o aviso padrão do Apps Script */
+        /* Moldura do Iframe que esconde os 38px da faixa azul do Google */
         .iframe-wrapper {
             flex: 1;
             width: 100%;
@@ -231,17 +221,16 @@
 
         .iframe-wrapper iframe {
             width: 100%;
-            height: calc(100% + 42px);
+            height: calc(100% + 38px);
             border: none;
             position: absolute;
-            top: -42px; /* Oculta a faixa azul padrão do Google Apps Script */
+            top: -38px;
             left: 0;
         }
     </style>
 </head>
 <body>
 
-    <!-- PAINEL DE LOGIN -->
     <div id="login-container">
         <div class="login-card">
             <div class="brand-logo">Intelli<span>Create</span></div>
@@ -264,11 +253,9 @@
         </div>
     </div>
 
-    <!-- ÁREA DO SISTEMA INCORPORADO -->
     <div id="app-container">
-        <!-- Faixa de Cobertura Superior (> 2.5 cm) -->
         <header class="top-banner">
-            <div class="header-brand">
+            <div class="header-brand" style="display:flex; align-items:center; gap:10px;">
                 <h1>Intelli<span>Create</span></h1>
                 <span class="header-tagline">Conectamos pessoas • Transformamos conhecimento • Geramos resultados</span>
             </div>
@@ -279,17 +266,15 @@
             </div>
         </header>
 
-        <!-- Iframe do Web App -->
         <div class="iframe-wrapper">
             <iframe id="app-iframe" src="" allow="autoplay"></iframe>
         </div>
     </div>
 
     <script>
-        // Cadastro de Usuários
         const usuariosValidos = {
             "amauri": { pass: "amauri.intellicreate", name: "Amauri" },
-            "bifulco": { pass: "Bifulco.intellicreate", name: "Bifulco" },
+            "bifulco": { pass: "bifulco.intellicreate", name: "Bifulco" },
             "rolf": { pass: "Rolf.intellicreate", name: "Rolf" }
         };
 
@@ -308,8 +293,6 @@
                 document.getElementById('app-container').style.display = 'flex';
                 
                 document.getElementById('logged-user-name').innerText = usuariosValidos[userKey].name;
-                
-                // Carrega o Web App após a autenticação
                 document.getElementById('app-iframe').src = targetURL;
             } else {
                 errorMsg.style.display = 'block';
